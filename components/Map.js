@@ -1,21 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, StyleSheet, Text, Image, Button, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, Image, Button, TouchableOpacity, Switch } from "react-native";
 import MapboxGL from "@react-native-mapbox-gl/maps";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import GetLocation from 'react-native-get-location'
 
 MapboxGL.setAccessToken(
   "sk.eyJ1IjoiYXZ2YWt1bW92aWQiLCJhIjoiY2wyMGQ0M2JhMHZrdDNkbnJpOTh4YXpmdyJ9.pqVM1LvwnKEatZAT-CR6Yw",
 );
 
 const Map = () => {
-  const onFlyToPress = () => {
-    for (const key in MapboxGL.Camera.defaultProps) {
-      console.log(key);
-    }
-  };
-  const cameraRef = useRef();
-  const [followUserLocation, setFollowUserLocation] = useState(true);
-  const r = {
+  const route = {
     "type": "FeatureCollection",
     "features": [
       {
@@ -353,21 +347,20 @@ const Map = () => {
       },
     ],
   };
-  const renderRoadDirections = () => {
-    const route = r;
+
+  const renderRoadDirections = (route) => {
     return route ? (
       <MapboxGL.ShapeSource id="routeSource" shape={route}>
         <MapboxGL.LineLayer id="routeFill" style={{ lineColor: "red", lineWidth: 3.2, lineOpacity: 1.84 }} />
       </MapboxGL.ShapeSource>
     ) : null;
   };
-  // const geolocate = new MapboxGL.UserTrackingModes({
-  //   positionOptions: {
-  //     enableHighAccuracy: true
-  //   },
-  //   trackUserLocation: true
-  // });
+
   const [coordinates, setCoordinates] = useState([36.8253, 55.7178]);
+
+  const [followUserLocation, setFollowUserLocation] = useState(false);
+  const toggleSwitch = () => setFollowUserLocation(previousState => !previousState);
+
   useEffect(() => {
     const d = MapboxGL.requestAndroidLocationPermissions();
   }, []);
@@ -382,30 +375,32 @@ const Map = () => {
           attributionPosition={{ top: 8, left: 8 }}
           logoEnabled={false}
           showUserLocation={true}
-          surfaceView={true}>
+          surfaceView={true}
+          onPress={(feature)=>{
+            console.log('Coords:', feature.geometry.coordinates)
+            setCoordinates(feature.geometry.coordinates)
+          }}
+        >
           <MapboxGL.UserLocation renderMode={'native'} onUpdate={(e) => {
-            // console.log('update');
-            // console.log(e);
+
           }} visible={true} />
-          {renderRoadDirections()}
-          <MapboxGL.Camera animationMode={"flyTo"} animationDuration={0} zoomLevel={12}
+          {renderRoadDirections(route)}
+          <MapboxGL.Camera animationMode={"flyTo"}
+                           animationDuration={3000}
+                           zoomLevel={16}
                            centerCoordinate={coordinates}
-                           triggerKey={coordinates}
+                           followUserLocation={followUserLocation}
           />
-          <MapboxGL.PointAnnotation id={'pa'} coordinate={[36.822215, 55.7122222]} />
+          <MapboxGL.PointAnnotation id={'pa'} coordinate={coordinates} />
         </MapboxGL.MapView>
         <View style={{ backgroundColor: "transparent", position: "absolute", bottom: 20, right: 20, zIndex: 10 }}>
-          <TouchableOpacity
-            onPress={(e) => {
-              setCoordinates([36.822215, 52.7122222]);
-            }}>
-            <Ionicons
-              name="md-create"
-              size={30}
-              color={"red"}
-            />
-
-          </TouchableOpacity>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={followUserLocation ? "#f4f3f4" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={followUserLocation}
+          />
         </View>
       </View>
     </View>
