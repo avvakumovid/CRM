@@ -7,6 +7,22 @@ import RadioButton from "./UI/RadioButton";
 MapboxGL.setAccessToken(
   "sk.eyJ1IjoiYXZ2YWt1bW92aWQiLCJhIjoiY2wyMGQ0M2JhMHZrdDNkbnJpOTh4YXpmdyJ9.pqVM1LvwnKEatZAT-CR6Yw",
 );
+//
+const progressListener = (offlineRegion, status) => console.log(offlineRegion, status);
+const errorListener = (offlineRegion, err) => console.log(offlineRegion, err);
+MapboxGL.setConnected(true);
+// MapboxGL.locationManager.start()
+// MapboxGL.offlineManager.createPack({
+//   name: 'asdas12',
+//   styleURL: 'mapbox://styles/mapbox/navigation-night-v1',
+//   minZoom: 1,
+//   maxZoom: 20,
+//   bounds: [[137.6641845703125,
+//           36.98500309285596], [140.4437255859375,
+//           35.11990857099681]]
+// },
+//   progressListener, errorListener
+// )
 
 const Map = () => {
   const [route, setRoute] = useState({
@@ -348,7 +364,11 @@ const Map = () => {
     ],
   })
 
-  const renderRoadDirections = (route) => {
+
+  // console.log(MapboxGL.offlineManager.getPacks());
+
+  const renderRoadDirections =  (route) => {
+
     return route ? (
       <MapboxGL.ShapeSource id="routeSource" shape={route}>
         <MapboxGL.LineLayer id="routeFill" style={{ lineColor: "red", lineWidth: 3.2, lineOpacity: 1.84 }} />
@@ -2309,13 +2329,17 @@ const Map = () => {
       text: 'Route 4',
     },
   ];
+  const packs =  MapboxGL.offlineManager.getPack('offlinePack')
+  console.log('packs', packs);
   return (
     <View style={styles.page}>
       <View style={styles.container}>
         <RadioButton prop={PROP} setRoute={setRoute}/>
         <MapboxGL.MapView
+          // offlinePacks={}
           userTrackingMode={1}
           style={styles.map}
+          styleURL={MapboxGL.StyleURL.Dark}
           attributionPosition={{ top: 8, left: 8 }}
           logoEnabled={false}
           showUserLocation={true}
