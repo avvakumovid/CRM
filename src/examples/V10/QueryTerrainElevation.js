@@ -1,44 +1,33 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {Easing, Button, View, Text} from 'react-native';
-import length from '@turf/length';
-import {lineString} from '@turf/helpers';
-import {Animated as RNAnimated} from 'react-native';
-import {
-  MapView,
-  ShapeSource,
-  LineLayer,
-  SkyLayer,
-  Camera,
-  Logger,
-  Terrain,
-  RasterDemSource,
-  Animated,
-  MarkerView,
-} from '@react-native-mapbox-gl/maps';
+import React, { useState, useEffect, useRef } from "react";
+import { Easing, Button, View, Text } from "react-native";
+import length from "@turf/length";
+import { lineString } from "@turf/helpers";
+import { Animated as RNAnimated } from "react-native";
+import MapboxGL from "@react-native-mapbox-gl/maps";
 
-import Page from '../common/Page';
+import Page from "../common/Page";
 
-Logger.setLogLevel('verbose');
+MapboxGL.Logger.setLogLevel("verbose");
 
-const AnimatedMarkerView = RNAnimated.createAnimatedComponent(MarkerView);
+const AnimatedMarkerView = RNAnimated.createAnimatedComponent(MapboxGL.MarkerView);
 
 const styles = {
-  mapView: {flex: 1},
+  mapView: { flex: 1 },
   triangleStyle: (size, color) => ({
     width: 0,
     height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
+    backgroundColor: "transparent",
+    borderStyle: "solid",
     borderLeftWidth: size,
     borderRightWidth: size,
     borderTopWidth: size * 1.3,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
     borderTopColor: color,
   }),
 };
 
-const QueryTerrainElevation = ({...props}) => {
+const QueryTerrainElevation = ({ ...props }) => {
   let [routeGeojson, setRouteGeojson] = useState(null);
   let [animatedRoute, setAnimatedRoute] = useState(null);
   let [actPoint, setActPoint] = useState(null);
@@ -56,13 +45,13 @@ const QueryTerrainElevation = ({...props}) => {
 
   function startAnimation(animatedRoute) {
     const ts = lineString(animatedRoute.__getValue());
-    const total = length(ts, {units: 'meters'});
+    const total = length(ts, { units: "meters" });
     const points = animatedRoute.__getValue();
     const endPoint = points[points.length - 1];
 
     animatedRoute
       .timing({
-        toValue: {end: {point: endPoint, from: total}},
+        toValue: { end: { point: endPoint, from: total } },
         duration: 20000,
         easing: Easing.linear,
       })
@@ -89,7 +78,7 @@ const QueryTerrainElevation = ({...props}) => {
   useEffect(() => {
     (async () => {
       let response = await fetch(
-        'https://docs.mapbox.com/mapbox-gl-js/assets/route-pin.geojson',
+        "https://docs.mapbox.com/mapbox-gl-js/assets/route-pin.geojson",
       );
       let featureCollection = await response.json();
       setRouteGeojson(featureCollection);
@@ -108,11 +97,11 @@ const QueryTerrainElevation = ({...props}) => {
   return (
     <Page {...props}>
       <Button title="Start" onPress={() => startAnimation(animatedRoute)} />
-      <MapView
+      <MapboxGL.MapView
         style={styles.mapView}
-        styleURL={'mapbox://styles/mapbox/satellite-streets-v11'}
+        styleURL={"mapbox://styles/mapbox/satellite-streets-v11"}
         ref={map}>
-        <Camera
+        <MapboxGL.Camera
           centerCoordinate={[6.58968, 45.39701]}
           zoomLevel={12.3}
           heading={162}
@@ -120,81 +109,81 @@ const QueryTerrainElevation = ({...props}) => {
           ref={camera}
         />
 
-        <RasterDemSource
+        <MapboxGL.RasterDemSource
           id="mapbox-dem"
           url="mapbox://mapbox.terrain-rgb"
           tileSize={512}
           maxZoomLevel={14}>
-          <SkyLayer
+          <MapboxGL.SkyLayer
             id="sky-layer"
             style={{
-              skyType: 'atmosphere',
-              skyAtmosphereColor: 'rgba(85, 151, 210, 0.5)',
+              skyType: "atmosphere",
+              skyAtmosphereColor: "rgba(85, 151, 210, 0.5)",
             }}
           />
 
-          <Terrain exaggeration={1.5} />
-        </RasterDemSource>
+          < MapboxGL.Terrain exaggeration={1.5} />
+        </ MapboxGL.RasterDemSource>
 
         {routeGeojson && false && (
-          <ShapeSource id="route" shape={routeGeojson}>
-            <LineLayer
+          < MapboxGL.ShapeSource id="route" shape={routeGeojson}>
+            < MapboxGL.LineLayer
               id="root"
               style={{
-                lineColor: 'rgba(0,0,255,0)',
+                lineColor: "rgba(0,0,255,0)",
                 lineWidth: 5,
-                lineCap: 'round',
-                lineJoin: 'round',
+                lineCap: "round",
+                lineJoin: "round",
               }}
             />
-          </ShapeSource>
+          </ MapboxGL.ShapeSource>
         )}
         {animatedRoute && (
-          <Animated.ShapeSource
+          < MapboxGL.Animated.ShapeSource
             id="animated-route"
             shape={
               new Animated.Shape({
-                type: 'LineString',
+                type: "LineString",
                 coordinates: animatedRoute,
               })
             }>
-            <Animated.LineLayer
-              id={'animated-route'}
+            < MapboxGL.Animated.LineLayer
+              id={"animated-route"}
               style={{
-                lineColor: 'rgba(255,0,0,0)',
+                lineColor: "rgba(255,0,0,0)",
                 lineWidth: 3,
-                lineCap: 'round',
-                lineJoin: 'round',
+                lineCap: "round",
+                lineJoin: "round",
               }}
             />
-          </Animated.ShapeSource>
+          </ MapboxGL.Animated.ShapeSource>
         )}
 
         {actPoint && (
-          <Animated.ShapeSource
+          < MapboxGL.Animated.ShapeSource
             id="currentLocationSource"
             shape={
               new Animated.Shape({
-                type: 'Point',
+                type: "Point",
                 coordinates: actPoint,
               })
             }>
-            <Animated.CircleLayer
+            < MapboxGL.Animated.CircleLayer
               id="currentLocationCircle"
               style={{
                 circleOpacity: 1.0,
-                circleColor: '#c62221',
+                circleColor: "#c62221",
                 circleRadius: 6,
               }}
             />
-          </Animated.ShapeSource>
+          </ MapboxGL.Animated.ShapeSource>
         )}
         {actPoint && altitude && (
-          <AnimatedMarkerView coordinate={actPoint} anchor={{x: 0.5, y: 1}}>
-            <View style={{alignItems: 'center'}}>
+          < MapboxGL.AnimatedMarkerView coordinate={actPoint} anchor={{ x: 0.5, y: 1 }}>
+            <View style={{ alignItems: "center" }}>
               <View
                 style={{
-                  backgroundColor: 'white',
+                  backgroundColor: "white",
                   padding: 10,
                   width: 140,
                   height: 50,
@@ -203,12 +192,12 @@ const QueryTerrainElevation = ({...props}) => {
                 <Text>Altitude: {altitude} m</Text>
               </View>
               <View
-                style={[styles.triangleStyle(12, 'white'), {marginTop: -1}]}
+                style={[styles.triangleStyle(12, "white"), { marginTop: -1 }]}
               />
             </View>
-          </AnimatedMarkerView>
+          </ MapboxGL.AnimatedMarkerView>
         )}
-      </MapView>
+      </ MapboxGL.MapView>
     </Page>
   );
 };

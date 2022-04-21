@@ -65,11 +65,7 @@ import UserLocationChange from '../examples/UserLocation/UserLocationChange';
 // MISC
 import BugReportTemplate from '../examples/BugReportExample';
 import CacheManagement from '../examples/CacheManagement';
-// V10
-import SkyAndTerran from '../examples/V10/SkyAndTerran';
-import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
-import CameraAnimation from '../examples/V10/CameraAnimation';
-import MapGestureHandlers from '../examples/V10/MapGestureHandlers';
+
 
 const styles = StyleSheet.create({
   exampleList: {
@@ -118,12 +114,6 @@ const BugReportPage = ({...props}) => (
 
 const Examples = [
   new ExampleItem('Bug Report Template', BugReportPage),
-  new ExampleGroup('V10', [
-    new ExampleItem('Sky and Terrain', SkyAndTerran),
-    new ExampleItem('Query Terrain Elevation', QueryTerrainElevation),
-    new ExampleItem('Camera Animation', CameraAnimation),
-    new ExampleItem('Map Gesture Handlers', MapGestureHandlers),
-  ]),
   new ExampleGroup('Map', [
     new ExampleItem('Show Map', ShowMap),
     new ExampleItem('Show Map With Local Style.JSON', ShowMapLocalStyle),
