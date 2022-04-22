@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Easing, StyleSheet, View } from "react-native";
 import MapboxGL from "@react-native-mapbox-gl/maps";
-import RadioButton from "./UI/RadioButton";
+import RadioButton from "../UI/RadioButton";
 import Geolocation from '@react-native-community/geolocation';
 
 
