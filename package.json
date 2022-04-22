@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "@mapbox/mapbox-gl-directions": "^4.1.0",
+    "@mapbox/mapbox-sdk": "^0.13.3",
+    "@react-native-community/geolocation": "^2.0.2",
     "@react-native-mapbox-gl/maps": "^8.6.0-beta.0",
+    "@turf/helpers": "^6.5.0",
     "react": "17.0.2",
     "react-native": "0.68.1",
     "react-native-dropdown-menu": "^2.0.0",
