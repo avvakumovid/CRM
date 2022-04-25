@@ -21,6 +21,9 @@ target 'CRM' do
 
   pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+
   target 'CRMTests' do
     inherit! :complete
     # Pods for testing

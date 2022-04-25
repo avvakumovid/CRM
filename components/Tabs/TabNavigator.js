@@ -46,7 +46,6 @@ const TabNavigator = () => {
             />
             <BottomTab.Screen
                 name="Maps"
-                component={props => <GoToMaps {...props}/>}
                 options={{
                     title: 'Карты',
                     tabBarIcon: ({color, size}) => {
@@ -56,7 +55,9 @@ const TabNavigator = () => {
                     },
                     tabBarInactiveTintColor: 'gray',
                 }}
-            />
+            >
+              {props => <GoToMaps {...props}/>}
+            </BottomTab.Screen>
         </BottomTab.Navigator>
     );
 };

@@ -1326,13 +1326,6 @@ const IsAuthNavigator = ({setAuth}) => {
                 {props => <BacklogTask {...props} setTitle={setTitle} setUsers={setUsers}/>}
             </Stack.Screen>
             <Stack.Screen
-                name="GoogleMap"
-                options={({navigation, route}) => ({
-                    headerShown: true,
-                })}>
-                {props => <Maps {...props} />}
-            </Stack.Screen>
-            <Stack.Screen
                 name="Maps2"
                 options={({navigation, route}) => ({
                     headerShown: true,

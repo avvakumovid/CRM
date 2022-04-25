@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text,} from 'react-native';
-import {LinearGradient} from 'expo-linear-gradient';
+import {LinearGradient} from 'react-native-linear-gradient';
 
 const Message = ({type, content}) => {
     const colors = type === 'msg' ? ['white', 'white'] : ['#3525af', '#bf69d4']

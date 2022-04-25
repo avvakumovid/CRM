@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import MessageFooter from '../../../UI/MessageFooter';
-import {Text} from 'react-native';
 import Message from './Message/Message';
 
 const OutgoingChat = ({route, setTitle}) => {

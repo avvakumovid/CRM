@@ -3,8 +3,14 @@ package com.crm;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import com.BV.LinearGradient.LinearGradientPackage;
+
+
+
 
 public class MainActivity extends ReactActivity {
+
+
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
