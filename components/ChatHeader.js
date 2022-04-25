@@ -15,7 +15,6 @@ const ChatHeader = ({
 }) => {
   return (
     <>
-      //sad
       <View style={styles.top}>
         <Text>{users}</Text>
       </View>
