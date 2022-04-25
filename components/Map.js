@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Easing, StyleSheet, View } from "react-native";
 import MapboxGL from "@react-native-mapbox-gl/maps";
 import RadioButton from "./UI/RadioButton";
@@ -9,6 +9,7 @@ import Geolocation from '@react-native-community/geolocation';
 MapboxGL.setAccessToken(
   "sk.eyJ1IjoiYXZ2YWt1bW92aWQiLCJhIjoiY2wyMGQ0M2JhMHZrdDNkbnJpOTh4YXpmdyJ9.pqVM1LvwnKEatZAT-CR6Yw",
 );
+
 
 const startAnimateRoute = () => {
   const vec = this.state.route.__getValue();
@@ -380,6 +381,18 @@ const Map = () => {
   const [coordinatePosition, setCoordinatePosition] = useState([36.8253, 55.7178])
   Geolocation.getCurrentPosition(info => setCoordinatePosition([info.coords.longitude, info.coords.latitude]));
   Geolocation.watchPosition((info) => setCoordinatePosition([info.coords.longitude, info.coords.latitude]))
+
+  const progressListener = (offlineRegion, status) => console.log(offlineRegion, status);
+  const errorListener = (offlineRegion, err) => console.log(offlineRegion, err);
+  const createPack = async () => {
+    await MapboxGL.offlineManager.createPack({
+      name: `pack 1`,
+      styleURL: 'mapbox://styles/mapbox/dark-v10',
+      minZoom: 14,
+      maxZoom: 18,
+      bounds: [[  37.612762, 55.747365,], [  37.633507, 55.739325,]]
+    }, progressListener, errorListener)
+  }
 
   const renderRoadDirections = (route) => {
     return route ? (
@@ -2339,6 +2352,10 @@ const Map = () => {
       text: "Route 4",
     },
   ];
+  useEffect(() => {
+    // createPack()
+     MapboxGL.offlineManager.getPacks().then(response => console.log(response));
+  }, [])
   return (
     <View style={styles.page}>
       <View style={styles.container}>
