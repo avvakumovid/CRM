@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
@@ -9,7 +9,28 @@ MapboxGL.setAccessToken(
 //ss
 const Map = () => {
   const [coordinates] = useState([36.8253, 55.7178]);
+  const progressListener = (offlineRegion, status) =>
+    console.log(offlineRegion, status);
+  const errorListener = (offlineRegion, err) => console.log(offlineRegion, err);
 
+  useEffect(async () => {
+    // MapboxGL.offlineManager.setTileCountLimit(100000);
+    console.log('effect');
+    await MapboxGL.offlineManager.createPack(
+      {
+        name: 'Pack 2',
+        styleURL: 'mapbox://styles/mapbox/navigation-night-v1',
+        minZoom: 6,
+        maxZoom: 20,
+        bounds: [
+          [-19.335937499999996, 35.60371874069731],
+          [50.625, -32.842673631954305],
+        ],
+      },
+      progressListener,
+      errorListener,
+    );
+  }, []);
   return (
     <View style={styles.page}>
       <View style={styles.container}>

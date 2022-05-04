@@ -1,13 +1,16 @@
-import React, {useState} from 'react';
-import {Easing, StyleSheet, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+
+import {Easing, StyleSheet, View, Dimensions, Text} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RadioButton from '../UI/RadioButton';
+import geoViewport from '@mapbox/geo-viewport';
 
 MapboxGL.setAccessToken(
   'sk.eyJ1IjoiYXZ2YWt1bW92aWQiLCJhIjoiY2wyMGQ0M2JhMHZrdDNkbnJpOTh4YXpmdyJ9.pqVM1LvwnKEatZAT-CR6Yw',
 );
 
 const Map = () => {
+  const [procent, setProcent] = useState('');
   const [route, setRoute] = useState({
     type: 'FeatureCollection',
     features: [
@@ -103,10 +106,58 @@ const Map = () => {
       },
     ],
   });
-  const [coordinatePosition, setCoordinatePosition] = useState([
-    36.8253, 55.7178,
-  ]);
+  const [road, setRoad] = useState({
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: [
+            [36.816301345825195, 55.70859366920591],
+            [36.814584732055664, 55.711204870389906],
+            [36.80952072143555, 55.71299392600409],
+            [36.803083419799805, 55.714686200504104],
+            [36.79673194885254, 55.716378401695174],
+            [36.79475784301758, 55.71681352729539],
+            [36.79694652557373, 55.71867484320059],
+            [36.79866313934326, 55.72010098627635],
+            [36.797633171081536, 55.721647930052676],
+            [36.80059432983398, 55.72159958898716],
+            [36.802310943603516, 55.71913411529964],
+            [36.80540084838867, 55.71898908258864],
+            [36.80900573730469, 55.71976258415723],
+          ],
+        },
+      },
+    ],
+  });
 
+  const [coordinatePosition, setCoordinatePosition] = useState([
+    36.91280601821537,
+    55.753137926074224,
+    ,
+  ]);
+  const CENTER_COORD = [36.91280601821537, 55.753137926074224];
+  const MAPBOX_VECTOR_TILE_SIZE = 512;
+  const {width, height} = Dimensions.get('window');
+  const bounds = geoViewport.bounds(
+    CENTER_COORD,
+    12,
+    [width, height],
+    MAPBOX_VECTOR_TILE_SIZE,
+  );
+  const options = {
+    name: '12334',
+    styleURL: MapboxGL.StyleURL.Street,
+    bounds: [
+      [bounds[0], bounds[1]],
+      [bounds[2], bounds[3]],
+    ],
+    minZoom: 10,
+    maxZoom: 20,
+  };
   const renderRoadDirections = (route) => {
     return route ? (
       <MapboxGL.ShapeSource id="routeSource" shape={route}>
@@ -117,8 +168,51 @@ const Map = () => {
       </MapboxGL.ShapeSource>
     ) : null;
   };
+  const renderRoad = (route) => {
+    return route ? (
+      <MapboxGL.ShapeSource id="Road" shape={route}>
+        <MapboxGL.LineLayer
+          id="routeFillD"
+          style={{lineColor: 'yellow', lineWidth: 3.2, lineOpacity: 1.84}}
+        />
+      </MapboxGL.ShapeSource>
+    ) : null;
+  };
 
-  const [coordinates, setCoordinates] = useState([36.8253, 55.7178]);
+  const progressListener = (offlineRegion, status) =>
+    setProcent(status.percentage);
+  const errorListener = (offlineRegion, err) => console.log(offlineRegion, err);
+  useEffect(() => {
+    // MapboxGL.offlineManager
+    //   .setTileCountLimit(1000000)
+    //   .then((d) => console.log(d));
+    // console.log('w');
+    // getPack();
+    creatPack();
+  }, []);
+  useEffect(() => {
+    MapboxGL.locationManager.start();
+    return () => {
+      MapboxGL.locationManager.stop();
+    };
+  }, []);
+  const creatPack = async () => {
+    await MapboxGL.offlineManager
+      .createPack(options, progressListener)
+      .then((d) => console.log(d));
+  };
+  const getPack = () => {
+    MapboxGL.offlineManager.getPacks().then((resp) => {
+      console.log('resp', resp[0].pack);
+    });
+    // MapboxGL.offlineManager.invalidatePack('OfflinePack122').then((resp) => {
+    //   console.log('invalidatePack', resp);
+    // });
+  };
+  const [coordinates, setCoordinates] = useState([
+    36.91280601821537, 55.753137926074224,
+  ]);
+  // const [coordinates, setCoordinates] = useState([36.8253, 55.7178]);
   const [followUserLocation, setFollowUserLocation] = useState(true);
   const toggleSwitch = () =>
     setFollowUserLocation((previousState) => !previousState);
@@ -669,6 +763,7 @@ const Map = () => {
     <View style={styles.page}>
       <View style={styles.container}>
         <RadioButton prop={PROP} setRoute={setRoute} />
+        <Text>Процент загрузки карты: {procent}</Text>
         <MapboxGL.MapView
           userTrackingMode={1}
           style={styles.map}
@@ -677,24 +772,25 @@ const Map = () => {
           showUserLocation={true}
           surfaceView={true}
           onPress={(feature) => {
-            // console.log('Coords:', feature.geometry.coordinates)
+            console.log('Coords:', feature);
             // setCoordinates(feature.geometry.coordinates)
           }}
         >
-          <MapboxGL.UserLocation
-            renderMode={'native'}
-            onUpdate={(e) => {}}
-            visible={true}
-          />
+          <MapboxGL.UserLocation renderMode={'native'} visible={true} />
           {renderRoadDirections(route)}
+          {renderRoad(road)}
           <MapboxGL.Camera
-            animationMode={'flyTo'}
-            animationDuration={3000}
-            zoomLevel={16}
-            // centerCoordinate={coordinates}
-            followUserLocation={followUserLocation}
+            // animationMode={'flyTo'}
+            // animationDuration={3000}
+            zoomLevel={1}
+            centerCoordinate={coordinates}
+            onUpdate={(feature) => {
+              console.log('Coords:', feature);
+              // setCoordinates(feature.geometry.coordinates)
+            }}
+            // followUserLocation={followUserLocation}
           />
-          <MapboxGL.PointAnnotation id={'pa'} coordinate={coordinatePosition} />
+          {/* <MapboxGL.PointAnnotation id={'pa'} coordinate={coordinatePosition} /> */}
         </MapboxGL.MapView>
       </View>
     </View>
