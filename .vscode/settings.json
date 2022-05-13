@@ -14,7 +14,7 @@
   // vscode-icons extension will restart automatically on project detection. (For vscode-icons)
   "vsicons.projectDetection.autoReload": true,
   // Controls how the editor should render whitespace characters.
-  "editor.renderWhitespace": "none",
+  "editor.renderWhitespace": "boundary",
   // Quickly toggle between hiding and showing folders and files. (For Peep)
   // To quickly hide/show files execute the Peep Toggle in Command Palette.
   "files.exclude": {
@@ -26,5 +26,9 @@
     "android/": false,
     "__tests__": false,
     "node_modules/": false
-  }
+  },
+  "cSpell.words": [
+    "procent",
+    "Zvenigorod"
+  ]
 }

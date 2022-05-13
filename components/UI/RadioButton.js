@@ -1,16 +1,13 @@
-import React, { Component, useState } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React, {Component, useState} from 'react';
+import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 
-
-
-const RadioButton = ({prop, setRoute}) => {
-
-    const [value, setValue] = useState()
-    return (
-      <>
-      <Text style={styles.heading}>Routes</Text>
+const RadioButton = ({prop, downloadOfflineMapOnRoute}) => {
+  const [value, setValue] = useState();
+  return (
+    <>
+      <Text style={styles.heading}>Маршруты</Text>
       <View style={styles.main}>
-        {prop.map(res => {
+        {prop.map((res) => {
           return (
             <View key={res.id} style={styles.container}>
               <Text style={styles.radioText}>{res.id}</Text>
@@ -18,29 +15,33 @@ const RadioButton = ({prop, setRoute}) => {
                 style={styles.radioCircle}
                 onPress={() => {
                   setValue(res.id);
-                  setRoute(res.route)
-                }}>
+                  downloadOfflineMapOnRoute(
+                    res.name,
+                    res.route.features[0].geometry.coordinates[0],
+                    res.route,
+                  );
+                }}
+              >
                 {value === res.id && <View style={styles.selectedRb} />}
               </TouchableOpacity>
             </View>
           );
         })}
       </View>
-      </>
-    )
-
-}
+    </>
+  );
+};
 const styles = StyleSheet.create({
   heading: {
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 5,
-    fontSize: 18
+    fontSize: 18,
   },
   main: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    marginBottom: 5
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginBottom: 5,
   },
   container: {
     alignItems: 'center',
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
     fontSize: 18,
     color: 'grey',
-    fontWeight: '700'
+    fontWeight: '700',
   },
   radioCircle: {
     height: 20,
@@ -76,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RadioButton
+export default RadioButton;
