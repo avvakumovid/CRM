@@ -14,6 +14,7 @@ import Maps3 from '../Maps/Maps3';
 import Maps2 from '../Maps/Maps2';
 import Map from '../Maps/Map';
 import ZuluGIS from './../Maps/ZuluGIS';
+import ZuluMap from '../Maps/ZuluMap';
 
 const IsAuthNavigator = ({setAuth}) => {
   const Stack = createNativeStackNavigator();
@@ -1501,6 +1502,14 @@ const IsAuthNavigator = ({setAuth}) => {
         })}
       >
         {(props) => <ZuluGIS {...props} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="ZuluMap"
+        options={({navigation, route}) => ({
+          headerShown: true,
+        })}
+      >
+        {(props) => <ZuluMap {...props} />}
       </Stack.Screen>
     </Stack.Navigator>
   );

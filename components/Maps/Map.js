@@ -5,7 +5,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import RadioButton from '../UI/RadioButton';
 import geoViewport from '@mapbox/geo-viewport';
 import * as Progress from 'react-native-progress';
-
+import geo from '../../data/geo';
 MapboxGL.setAccessToken(
   'sk.eyJ1IjoiYXZ2YWt1bW92aWQiLCJhIjoiY2wyMGQ0M2JhMHZrdDNkbnJpOTh4YXpmdyJ9.pqVM1LvwnKEatZAT-CR6Yw',
 );
@@ -142,6 +142,7 @@ const Map = () => {
     if (procent === 100) {
       setMapEnabled(true);
     }
+    console.log(geo.type);
   }, [procent]);
   const downloadOfflineMapOnRoute = async (name, coordinates, route) => {
     let pack = await MapboxGL.offlineManager.getPack(name);
@@ -153,21 +154,6 @@ const Map = () => {
     setCoordinates(coordinates);
     setRoute(route);
   };
-
-  // useEffect(() => {
-  //   // MapboxGL.offlineManager
-  //   //   .setTileCountLimit(1000000)
-  //   //   .then((d) => console.log(d));
-  //   // console.log('w');
-  //   // getPack();
-  //   creatPack();
-  // }, []);
-  // useEffect(() => {
-  //   MapboxGL.locationManager.start();
-  //   return () => {
-  //     MapboxGL.locationManager.stop();
-  //   };
-  // }, []);
 
   const renderRoadDirections = (route) => {
     return route ? (
@@ -275,12 +261,9 @@ const Map = () => {
         >
           <MapboxGL.UserLocation renderMode={'native'} visible={true} />
           {renderRoadDirections(route)}
-          {renderRoad(road)}
-          <MapboxGL.Camera
-            animationDuration={0}
-            zoomLevel={13}
-            centerCoordinate={coordinates}
-          />
+          {renderRoad(geo)}
+          {pointsAnnotationCreate(geo)}
+          {/* <MapboxGL.CircleLayer /> */}
         </MapboxGL.MapView>
       </View>
     </View>
@@ -1183,5 +1166,16 @@ const PROP = [
     name: 'Vladivostok',
   },
 ];
+
+const pointsAnnotationCreate = (geo) => {
+  return geo.features
+    .filter((f) => f.geometry.type === 'Point')
+    .map((p) => (
+      <MapboxGL.PointAnnotation
+        id={p.properties.Sys.toString()}
+        coordinate={p.geometry.coordinates}
+      />
+    ));
+};
 
 export default Map;

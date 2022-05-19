@@ -1546,7 +1546,7 @@
     "@turf/helpers" "^6.5.0"
     "@turf/invariant" "^6.5.0"
 
-"@turf/distance@6.5.0", "@turf/distance@^6.5.0":
+"@turf/distance@6.5.0", "@turf/distance@^6.3.0", "@turf/distance@^6.5.0":
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@turf/distance/-/distance-6.5.0.tgz#21f04d5f86e864d54e2abde16f35c15b4f36149a"
   integrity sha512-xzykSLfoURec5qvQJcfifw/1mJa+5UwByZZ5TZ8iaqjGYN0vomhV9aiSLeYdUGtYRESZ+DYC/OzY+4RclZYgMg==
@@ -1554,7 +1554,15 @@
     "@turf/helpers" "^6.5.0"
     "@turf/invariant" "^6.5.0"
 
-"@turf/helpers@6.5.0", "@turf/helpers@6.x", "@turf/helpers@^6.5.0":
+"@turf/explode@^6.3.0":
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/@turf/explode/-/explode-6.5.0.tgz#02c292cc143dd629643da5b70bb5b19b9f0f1c6b"
+  integrity sha512-6cSvMrnHm2qAsace6pw9cDmK2buAlw8+tjeJVXMfMyY+w7ZUi1rprWMsY92J7s2Dar63Bv09n56/1V7+tcj52Q==
+  dependencies:
+    "@turf/helpers" "^6.5.0"
+    "@turf/meta" "^6.5.0"
+
+"@turf/helpers@6.5.0", "@turf/helpers@6.x", "@turf/helpers@^6.3.0", "@turf/helpers@^6.5.0":
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-6.5.0.tgz#f79af094bd6b8ce7ed2bd3e089a8493ee6cae82e"
   integrity sha512-VbI1dV5bLFzohYYdgqwikdMVpe7pJ9X3E+dlr425wa2/sMJqYDhTO++ec38/pcPvPE6oD9WEEeU3Xu3gza+VPw==
@@ -3858,6 +3866,16 @@ gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
+
+geojson-path-finder@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/geojson-path-finder/-/geojson-path-finder-1.5.3.tgz#9cc647e63f161e64464f8b07333b6f36222142ca"
+  integrity sha512-AY04yLLbHQIEfLlCb/kvrU1rJJPuLR0zfWe2fjuquzQdJngvZKN+Fi/mpLoMlimrzDq2xQSYffzIv7XAG0OwZw==
+  dependencies:
+    "@turf/distance" "^6.3.0"
+    "@turf/explode" "^6.3.0"
+    "@turf/helpers" "^6.3.0"
+    tinyqueue "^2.0.0"
 
 geojson-rbush@3.x:
   version "3.2.0"
@@ -7691,6 +7709,11 @@ through2@^2.0.1:
   dependencies:
     readable-stream "~2.3.6"
     xtend "~4.0.1"
+
+tinyqueue@^2.0.0:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tinyqueue/-/tinyqueue-2.0.3.tgz#64d8492ebf39e7801d7bd34062e29b45b2035f08"
+  integrity sha512-ppJZNDuKGgxzkHihX8v9v9G5f+18gzaTfrukGrq6ueg0lmH4nqVnA2IPG0AEH3jKEk2GRJCUhDoqpoiw3PHLBA==
 
 tmpl@1.0.5:
   version "1.0.5"

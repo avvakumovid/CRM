@@ -16,6 +16,10 @@ const GoToMaps = ({navigation}) => {
         title={'ZuluGIS'}
         onPress={() => navigation.navigate('ZuluGIS')}
       />
+      <Button
+        title={'ZuluMap'}
+        onPress={() => navigation.navigate('ZuluMap')}
+      />
     </View>
   );
 };
