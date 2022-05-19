@@ -1,6 +1,14 @@
 import React, {useState, useEffect} from 'react';
 
-import {Easing, StyleSheet, View, Dimensions, Text, Switch} from 'react-native';
+import {
+  Easing,
+  StyleSheet,
+  View,
+  Dimensions,
+  Text,
+  Switch,
+  Image,
+} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RadioButton from '../UI/RadioButton';
 import geoViewport from '@mapbox/geo-viewport';
@@ -170,7 +178,7 @@ const Map = () => {
       <MapboxGL.ShapeSource id="Road" shape={route}>
         <MapboxGL.LineLayer
           id="routeFillD"
-          style={{lineColor: 'yellow', lineWidth: 3.2, lineOpacity: 1.84}}
+          style={{lineColor: '#008000', lineWidth: 3.2, lineOpacity: 1.84}}
         />
       </MapboxGL.ShapeSource>
     ) : null;
@@ -264,12 +272,24 @@ const Map = () => {
           {renderRoad(geo)}
           {pointsAnnotationCreate(geo)}
           {/* <MapboxGL.CircleLayer /> */}
+          <MapboxGL.PointAnnotation
+            key={'123123'}
+            id={'123123'}
+            coordinate={[-117.20611157485, 52.180961084261]}
+            title="sad"
+          />
         </MapboxGL.MapView>
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
+  icon: {
+    iconSize: 1,
+    iconImage: 'dot-11',
+    iconColor: '#ff0011',
+    iconHaloColor: 'rgba(0, 255, 0, 0)',
+  },
   page: {
     flex: 1,
   },
@@ -1168,14 +1188,29 @@ const PROP = [
 ];
 
 const pointsAnnotationCreate = (geo) => {
-  return geo.features
-    .filter((f) => f.geometry.type === 'Point')
-    .map((p) => (
-      <MapboxGL.PointAnnotation
-        id={p.properties.Sys.toString()}
-        coordinate={p.geometry.coordinates}
+  const g = geo.features.filter((f) => f.geometry.type === 'Point');
+
+  const s = {
+    type: 'FeatureCollection',
+    features: [...g],
+  };
+  return (
+    <MapboxGL.ShapeSource id="exampleShapeSource" shape={s}>
+      <MapboxGL.SymbolLayer
+        onPress={(e) => console.log(e)}
+        id="exampleIconName"
+        style={styles.icon}
       />
-    ));
+    </MapboxGL.ShapeSource>
+  );
+  // return geo.features
+  //   .filter((f) => f.geometry.type === 'Point')
+  //   .map((p) => (
+  //     <MapboxGL.PointAnnotation
+  //       id={p.properties.Sys.toString()}
+  //       coordinate={p.geometry.coordinates}
+  //     />
+  //   ));
 };
 
 export default Map;
