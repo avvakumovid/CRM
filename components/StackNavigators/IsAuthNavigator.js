@@ -12,7 +12,7 @@ import BacklogTask from '../Tabs/Task/BackLog/BacklogTask';
 import Maps5 from '../Maps/Maps5';
 import Maps3 from '../Maps/Maps3';
 import Maps2 from '../Maps/Maps2';
-import Map from '../Maps/Map';
+import Map from '../Map/Map';
 import ZuluGIS from './../Maps/ZuluGIS';
 import ZuluMap from '../Maps/ZuluMap';
 

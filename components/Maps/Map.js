@@ -287,8 +287,6 @@ const styles = StyleSheet.create({
   icon: {
     iconSize: 1,
     iconImage: 'dot-11',
-    iconColor: '#ff0011',
-    iconHaloColor: 'rgba(0, 255, 0, 0)',
   },
   page: {
     flex: 1,
@@ -1188,14 +1186,14 @@ const PROP = [
 ];
 
 const pointsAnnotationCreate = (geo) => {
-  const g = geo.features.filter((f) => f.geometry.type === 'Point');
+  const points = geo.features.filter((f) => f.geometry.type === 'Point');
 
-  const s = {
+  const shape = {
     type: 'FeatureCollection',
-    features: [...g],
+    features: [...points],
   };
   return (
-    <MapboxGL.ShapeSource id="exampleShapeSource" shape={s}>
+    <MapboxGL.ShapeSource id="exampleShapeSource" shape={shape}>
       <MapboxGL.SymbolLayer
         onPress={(e) => console.log(e)}
         id="exampleIconName"
